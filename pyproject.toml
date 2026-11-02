@@ -15,7 +15,7 @@ maintainers = [
 ]
 readme = "README.md"
 license = "MIT"
-keywords = ["jobs-scraper", "linkedin", "indeed", "glassdoor", "ziprecruiter", "bayt", "naukri", "bdjobs", "hellowork", "cli", "mcp", "mcp-server"]
+keywords = ["jobs-scraper", "linkedin", "indeed", "glassdoor", "ziprecruiter", "bayt", "naukri", "bdjobs", "hellowork", "cli"]
 requires-python = ">=3.10"
 dependencies = [
     "requests>=2.31.0",
@@ -27,12 +27,8 @@ dependencies = [
 ]
 dynamic = ["classifiers"]
 
-[project.optional-dependencies]
-mcp = ["mcp>=2.3.0"]
-
 [project.scripts]
 jobspy = "jobspy.cli:main"
-mcp-jobspy = "jobspy.mcp:main"
 
 [project.urls]
 Homepage = "https://github.com/speedyapply/JobSpy"

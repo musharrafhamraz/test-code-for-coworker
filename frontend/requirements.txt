@@ -1,0 +1,7 @@
+# JobSpy web server + UI — runtime dependencies only.
+# The repo root pyproject already covers development; these are the minimal
+# pins for deploying frontend/server.py (and installing the scraper library
+# as a package instead of a path dependency).
+python-jobspy>=1.4.1
+starlette>=0.41
+uvicorn>=0.30
