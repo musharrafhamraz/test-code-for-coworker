@@ -1,6 +1,6 @@
-# JobSpy Web UI
+# Search page
 
-A small frontend + JSON API for JobSpy. Enter a keyword, pick boards, hit
+The web page and JSON API for this job search app. Enter a keyword, pick boards, hit
 **Search Jobs**, get the listings.
 
 ## Run
@@ -33,7 +33,7 @@ uvicorn.run(app, host="127.0.0.1", port=8555)  # or gunicorn -k uvicorn.workers.
 The routes are also reusable piecemeal — `api_search`, `api_job`, `api_info`,
 `api_health` — or skip them and call the functions underneath directly
 (`title_relevance(search_term, title)` if you still want the optional title
-scorer, and `scrape_jobs` through a worker thread as in `api_search`). Minimal
+scorer, and the board search through a worker thread as in `api_search`). Minimal
 third-party requirements live in `frontend/requirements.txt`; the UI itself
 has none.
 
