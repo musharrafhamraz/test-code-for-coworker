@@ -74,23 +74,6 @@ jobspy nurse --site indeed,linkedin --hours-old 24 -o jobs.jsonl
 jobspy "data analyst" --remote --fields title,company,job_url
 ```
 
-## MCP server
-
-[`mcp-jobspy`](https://pypi.org/project/mcp-jobspy/) is an MCP server that runs with `uvx mcp-jobspy@latest`. See [mcp/README.md](https://github.com/speedyapply/JobSpy/blob/main/mcp/README.md) for setup, tools and proxies.
-
-**Standard config** works for most clients:
-
-```json
-{
-  "mcpServers": {
-    "jobspy": {
-      "command": "uvx",
-      "args": ["mcp-jobspy@latest"]
-    }
-  }
-}
-```
-
 ## Parameters for `scrape_jobs()`
 
 ```plaintext
@@ -305,3 +288,40 @@ JobPost
 ```
 
 A column is empty when the job board doesn't provide it.
+
+---
+
+## Web UI
+
+This checkout includes a local page in [`frontend/`](frontend/). Enter a keyword, pick boards, and click **Search Jobs**. Results render as cards (salary, job type, remote, age, link). Click a card for the full record. Job descriptions are shown as formatted text — headings, lists, and bold — rather than raw markdown.
+
+```bash
+pip install python-jobspy starlette uvicorn
+python frontend/server.py    # -> http://127.0.0.1:8555
+```
+
+From an existing virtualenv:
+
+```bash
+.venv/Scripts/python.exe frontend/server.py
+```
+
+The form has:
+
+- One **keyword**. There is no location field and no relevance filter. Listings are shown as each board returns them (`title_match` is sent as `none`).
+- Board pills for Indeed, LinkedIn, ZipRecruiter, Glassdoor, Bayt, Naukri, BDJobs, and HelloWork.
+- Results per board, posting age, and job type.
+- **Remote** and **Upwork** checkboxes side by side.
+- Advanced options: Indeed/Glassdoor country, a proxy, and full descriptions.
+
+### Upwork
+
+Upwork is not scraped. The page talks to Upwork's hosted MCP server (`https://mcp.upwork.com/mcp`) after you sign in.
+
+1. Click **Connect Upwork**. The browser opens Upwork's own login. The password is never entered into JobSpy.
+2. After Upwork redirects back, the card shows **Connected**, the account name, and the role (for example Freelancer). **Connect Upwork** is hidden. **Disconnect** drops the local session.
+3. Tick **Upwork** and click **Search Jobs**. The keyword is sent to Upwork and matching jobs are listed with the other boards. If that keyword matches nothing, the latest jobs for the account are shown instead, with a note that they were not filtered.
+
+The OAuth client registration and tokens are stored only on this machine, in `frontend/.upwork_client.json` and `frontend/.upwork_token.json`. Both are gitignored. The server binds to `127.0.0.1` by default.
+
+Endpoints added for that flow: `GET /api/upwork/login`, `GET /api/upwork/callback`, `GET /api/upwork/status`, `GET /api/upwork/jobs`, and `POST /api/upwork/logout`. Board search is still `POST /api/search` on top of `scrape_jobs()`. See [frontend/README.md](frontend/README.md) for the rest of the API.
